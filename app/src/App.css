@@ -1,3 +1,8 @@
+.background {
+  background: rgb(66, 58, 198);
+  background: linear-gradient(90deg, rgba(66, 58, 198, 1) 0%, rgba(221, 45, 175, 1) 100%);
+}
+
 .App {
   text-align: center;
 }
@@ -32,6 +37,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }

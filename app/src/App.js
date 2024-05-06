@@ -23,6 +23,7 @@ function App() {
     setInCaricamento(true);
     setIndovinato(false);
     setNumero("");
+    setMessaggio("");
     const response = await fetch(`http://localhost:8080/partita`, {
       method: "POST",
     });
@@ -42,10 +43,10 @@ function App() {
       }
     );
     let risposta = await response.json();
-    partita.tentativi = risposta['tentativi'];
-    if ((risposta['risultato'] < 0)) {
+    partita.tentativi = risposta["tentativi"];
+    if (risposta["risultato"] < 0) {
       setMessaggio("Il numero inserito è troppo PICCOLO");
-    } else if ((risposta['risultato'] > 0)) {
+    } else if (risposta["risultato"] > 0) {
       setMessaggio("Il numero inserito è troppo GRANDE");
     } else {
       setIndovinato(true);
@@ -59,31 +60,43 @@ function App() {
 
   return (
     <div className="App">
-      <Card className="mx-auto w-50 position-absolute top-50 start-50 translate-middle">
-        <h1>Indovina numero</h1>
-        <Button className="w-50 m-1 mx-auto" onClick={nuovaPartita}>
-          Nuova partita
-        </Button>
-        {caricamento ? (
-          <h5>Caricamento...</h5>
-        ) : (
-          <>
-            <h5>ID: {partita.id}</h5>
-            <h5>Tentativi: {partita.tentativi}</h5>
-            {indovinato ? (
-              <h5>Hai indovinato!!</h5>
-            ) : (
-              <>
-                <p>Inserisci un numero tra 1 e 100:</p>
-                <p>{messaggio}</p>
-                <FormControl name="numero" value={numero} onChange={HandlerNumero} type="number" min="1" max="100" className="w-50 m-1 mx-auto"></FormControl>
-                <Button className="w-50 m-1 mx-auto" onClick={tentativo}>
-                  Invia
-                </Button>
-              </>
-            )}
-          </>
-        )}
+      <Card
+        className="mx-auto w-50 position-absolute top-50 start-50 translate-middle background"
+      >
+        <Card className="m-1">
+          <h1>Indovina numero</h1>
+          <Button className="w-50 m-1 mx-auto" onClick={nuovaPartita}>
+            Nuova partita
+          </Button>
+          {caricamento ? (
+            <h5>Caricamento...</h5>
+          ) : (
+            <>
+              <h5>ID: {partita.id}</h5>
+              <h5>Tentativi: {partita.tentativi}</h5>
+              {indovinato ? (
+                <h5>Hai indovinato!!</h5>
+              ) : (
+                <>
+                  <p>Inserisci un numero tra 1 e 100:</p>
+                  <p>{messaggio}</p>
+                  <FormControl
+                    name="numero"
+                    value={numero}
+                    onChange={HandlerNumero}
+                    type="number"
+                    min="1"
+                    max="100"
+                    className="w-50 m-1 mx-auto"
+                  ></FormControl>
+                  <Button className="w-50 m-1 mx-auto" onClick={tentativo}>
+                    Invia
+                  </Button>
+                </>
+              )}
+            </>
+          )}
+        </Card>
       </Card>
     </div>
   );
