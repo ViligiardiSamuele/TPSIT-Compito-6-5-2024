@@ -32,26 +32,28 @@ function App() {
   }
 
   async function tentativo() {
-    setInCaricamento(true);
-    setNumero("");
-    const response = await fetch(
-      `http://localhost:8080/partita/${partita.id}`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: partita.id, numero: numero }),
+    if (numero != "") {
+      setInCaricamento(true);
+      setNumero("");
+      const response = await fetch(
+        `http://localhost:8080/partita/${partita.id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: partita.id, numero: numero }),
+        }
+      );
+      let risposta = await response.json();
+      partita.tentativi = risposta["tentativi"];
+      if (risposta["risultato"] < 0) {
+        setMessaggio("Il numero inserito è troppo PICCOLO");
+      } else if (risposta["risultato"] > 0) {
+        setMessaggio("Il numero inserito è troppo GRANDE");
+      } else {
+        setIndovinato(true);
       }
-    );
-    let risposta = await response.json();
-    partita.tentativi = risposta["tentativi"];
-    if (risposta["risultato"] < 0) {
-      setMessaggio("Il numero inserito è troppo PICCOLO");
-    } else if (risposta["risultato"] > 0) {
-      setMessaggio("Il numero inserito è troppo GRANDE");
-    } else {
-      setIndovinato(true);
+      setInCaricamento(false);
     }
-    setInCaricamento(false);
   }
 
   function HandlerNumero(e) {
@@ -60,9 +62,7 @@ function App() {
 
   return (
     <div className="App">
-      <Card
-        className="mx-auto w-50 position-absolute top-50 start-50 translate-middle background"
-      >
+      <Card className="mx-auto w-50 position-absolute top-50 start-50 translate-middle background">
         <Card className="m-1">
           <h1>Indovina numero</h1>
           <Button className="w-50 m-1 mx-auto" onClick={nuovaPartita}>
